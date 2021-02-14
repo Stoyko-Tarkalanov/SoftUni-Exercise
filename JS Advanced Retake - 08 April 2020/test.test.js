@@ -1,8 +1,3 @@
-const { describe } = require('mocha');
-const { assert } = require('chai');
-
-let { Repository } = require("./solution.js");
-
 describe('Repository class', () => {
     let current;
 
@@ -35,6 +30,9 @@ describe('Repository class', () => {
             const entity = { name: 'Pesho', age: 22, birthday: new Date(1998, 0, 7) };
             current.add(entity);
             assert.equal(current.count, 1);
+            current.add(entity);
+            current.add(entity);
+            assert.equal(current.count, 3);
         });
     });
 
@@ -44,6 +42,10 @@ describe('Repository class', () => {
             current.add(entity);
             assert.deepEqual(current.data.get(0), entity);
             assert.deepEqual(current.getId(0), entity);
+            // const entity2 = { name: 'Gosho', age: 21, birthday: new Date(1998, 0, 7) };
+            // current.add(entity2);
+            // assert.deepEqual(current.data.get(1), entity2);
+            // assert.deepEqual(current.getId(1), entity2);
         });
 
         it('Should return the id', () => {
@@ -64,6 +66,7 @@ describe('Repository class', () => {
                 birthday: new Date(1998, 0, 7)
             }), 'Property name is not of correct type!');
         });
+
     });
 
     describe('Get id method', () => {
@@ -147,4 +150,3 @@ describe('Repository class', () => {
         });
     });
 });
-
