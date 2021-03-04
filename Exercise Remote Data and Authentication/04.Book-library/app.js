@@ -29,9 +29,9 @@ async function getAllBooks() {
     }
 }
 
-async function createBook(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
+async function createBook(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
     const book = { title: formData.get('title'), author: formData.get('author') };
 
     await request('http://localhost:3030/jsonstore/collections/books', {
@@ -40,7 +40,7 @@ async function createBook(event) {
         body: JSON.stringify(book)
     });
 
-    event.target.reset();
+    e.target.reset();
     getAllBooks();
 }
 
@@ -67,10 +67,9 @@ async function deleteBook(id) {
 
 (function begin() {
     document.getElementById('loadBooks').addEventListener('click', getAllBooks);
-    document.getElementById('createForm').addEventListener('click', createBook);
+    document.getElementById('createForm').addEventListener('submit', createBook);
 
     document.getElementById('editForm').addEventListener('submit', updateBook);
-    // console.log(document.querySelector('#editForm button'));
     document.querySelector('#editForm button').addEventListener('click', (e) => {
         document.getElementById('createForm').style.display = 'block';
         document.getElementById('editForm').style.display = 'none';
@@ -96,8 +95,11 @@ function handleClick(e) {
 }
 
 async function bookEditing(id) {
-    const book = await request(`http://localhost:3030/jsonstore/collections/books/${id}`)
-    document.querySelector('#editForm [name ="id"]').value = id;
-    document.querySelector('#editForm [name ="title"]').value = book.title;
-    document.querySelector('#editForm [name ="author"]').value = book.author;
+    const book = await request(`http://localhost:3030/jsonstore/collections/books/${id}`);
+    // console.log(document.querySelector('#editForm [name="id"]'));
+    document.querySelector('#editForm [name="id"]').value = id;
+    document.querySelector('#editForm [name="title"]').value = book.title;
+    document.querySelector('#editForm [name="author"]').value = book.author;
 }
+
+
