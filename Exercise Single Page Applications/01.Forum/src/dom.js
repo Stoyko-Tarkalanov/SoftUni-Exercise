@@ -1,15 +1,13 @@
-export function e(type, attributes, ...content) {
+export function e(type, attributes = {}, ...content) {
     const result = document.createElement(type);
 
-    for (let [attr, value] of Object.entries(attributes || {})) {
+    for (let attr in attributes) {
         if (attr.substring(0, 2) == 'on') {
-            result.addEventListener(attr.substring(2).toLocaleLowerCase(), value);
+            result.addEventListener(attr.substring(2).toLowerCase(), attributes[attr]);
         } else {
-            result[attr] = value;
+            result[attr] = attributes[attr];
         }
     }
-
-    content = content.reduce((a, c) => a.concat(Array.isArray(c) ? c : [c]), []);
 
     content.forEach(e => {
         if (typeof e == 'string' || typeof e == 'number') {
@@ -23,7 +21,6 @@ export function e(type, attributes, ...content) {
     return result;
 }
 
-// Test other way
 export async function request(url, options) {
     const response = await fetch(url, options);
     if (response.ok == false) {

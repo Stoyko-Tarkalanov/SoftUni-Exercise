@@ -3,7 +3,7 @@ import { setupDetails } from './details.js';
 import { setupLogin, showLogin } from './login.js';
 import { setupRegister, showRegister } from './register.js';
 import { setupCreate, showCreate } from './create.js';
-import { setupEdit } from './edit.js';
+import { setupEdit, showEdit } from './edit.js';
 
 const main = document.querySelector('main');
 
@@ -23,6 +23,7 @@ setupSection('form-sign-up', setupRegister);
 
 setupNavigation();
 showHome();
+showEdit();
 
 function setupSection(sectionId, setup) {
     const section = document.getElementById(sectionId);

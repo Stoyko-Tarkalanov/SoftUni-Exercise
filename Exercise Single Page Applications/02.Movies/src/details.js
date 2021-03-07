@@ -89,7 +89,6 @@ function createMovieCard(movie, likes, ownLike) {
 
 }
 
-
 let main;
 let section;
 
