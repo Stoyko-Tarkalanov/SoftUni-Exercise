@@ -26,7 +26,6 @@ export async function showPost(id) {
     </div>`;
     postElement.innerHTML = postHTML;
 
-    // get comments
     let comments = await getComments(id);
     Object.keys(comments).forEach(comment => {
         if (comments[comment].postId == id) {
@@ -53,8 +52,6 @@ export async function showPost(id) {
     postElement.innerHTML += commentForm(id);
     main.appendChild(postElement);
 }
-
-// get post from database
 
 async function getPost(id) {
     const result = await request('http://localhost:3030/jsonstore/collections/myboard/posts/' + id, {

@@ -1,18 +1,11 @@
 import { showPost, setupPost, addComment } from './post.js';
 
 const newTopicDiv = document.querySelector('.container .new-topic-border');
-// get form
 let form = document.querySelector('.container form');
 let topics = document.querySelector('.topic-title');
 let cancelBtn = document.querySelector('.container form .cancel');
 
 setupPost(topics, '');
-
-// window.addEventListener("load", async function () {
-//     // load posts from database
-//     let posts = await getPosts();
-//     renderPosts(posts);
-// });
 
 cancelBtn.addEventListener('click', (event) => {
     event.preventDefault();
@@ -33,14 +26,14 @@ form.addEventListener('submit', async (event) => {
     let date = new Date();
     let subscribes = '0';
     let post = { topicName, username, postText, date, subscribes };
-    // validate fields
     let valid = true;
+
     Object.values(post).forEach(element => {
         if (element == '') {
             valid = false;
         }
     });
-    // send request
+
     if (valid) {
         let result = await addPost(post);
         if (result.hasOwnProperty('_id')) {
@@ -56,31 +49,27 @@ form.addEventListener('submit', async (event) => {
     }
 });
 
-// redirect to topic on click
 topics.addEventListener('click', async (event) => {
     event.preventDefault();
 
     if (event.target.tagName == 'H2') {
-        // hide newTopic
         newTopicDiv.style.display = 'none';
         let id = event.target.parentNode.querySelector('input').value; ///
         showPost(id);
     } else if (event.target.tagName == 'BUTTON') {
-        // get gorm data
         let commentForm = document.querySelector('.answer-comment form');
-        // check if all fields are valid
         let formData = new FormData(commentForm);
         let postText = formData.get('postText');
         let username = formData.get('username');
         let postId = formData.get('postId');
-        let id = postId; // needed for showPost()
+        let id = postId;
         let date = new Date();
 
         if (postText != '' && username != '') {
             let newComment = { username, postText, date, postId };
             let result = await addComment(newComment);
         }
-        // post new comment
+
         showPost(id);
     }
 });
@@ -92,6 +81,7 @@ function clearFields() {
     fields.forEach(field => {
         field.value = '';
     });
+    
     textArea.value = '';
 }
 
@@ -113,9 +103,7 @@ async function getPosts(postData) {
 
 function renderPosts(posts) {
     let container = document.querySelector('.topic-title');
-    // clear page contents
 
-    // render all posts
     Object.keys(posts).forEach(post => {
         let postHTML = `                
         <div class="topic-container">
@@ -133,7 +121,6 @@ function renderPosts(posts) {
                         </div>
                     </div>
                     <div class="subscribers">
-                        <!-- <button class="subscribe">Subscribe</button> -->
                         <p>Subscribers: <span>${posts[post].subscribes}</span></p>
                     </div>
                 </div>
