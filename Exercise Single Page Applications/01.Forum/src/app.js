@@ -7,15 +7,15 @@ let topics = document.querySelector('.topic-title');
 let cancelBtn = document.querySelector('.container form .cancel');
 
 setupPost(topics, '');
-window.addEventListener("load", async function () {
-    // load posts from database
-    let posts = await getPosts();
-    renderPosts(posts);
-});
+
+// window.addEventListener("load", async function () {
+//     // load posts from database
+//     let posts = await getPosts();
+//     renderPosts(posts);
+// });
 
 cancelBtn.addEventListener('click', (event) => {
     event.preventDefault();
-    console.log(event.target.className);
     if (event.target.className == 'cancel') {
         clearFields();
         return;
@@ -33,7 +33,6 @@ form.addEventListener('submit', async (event) => {
     let date = new Date();
     let subscribes = '0';
     let post = { topicName, username, postText, date, subscribes };
-    console.log(post);
     // validate fields
     let valid = true;
     Object.values(post).forEach(element => {
@@ -47,16 +46,13 @@ form.addEventListener('submit', async (event) => {
         if (result.hasOwnProperty('_id')) {
             // clear fields
             clearFields();
-            console.log(`post published`);
             let posts = await getPosts();
-            console.log(posts);
             renderPosts(posts);
         } else {
             alert('Server error!');
-            console.log(result);
         }
     } else {
-        alert(`All fields are required!`);
+        return alert(`All fields are required!`);
     }
 });
 
@@ -67,7 +63,7 @@ topics.addEventListener('click', async (event) => {
     if (event.target.tagName == 'H2') {
         // hide newTopic
         newTopicDiv.style.display = 'none';
-        let id = event.target.parentNode.querySelector('input').value;
+        let id = event.target.parentNode.querySelector('input').value; ///
         showPost(id);
     } else if (event.target.tagName == 'BUTTON') {
         // get gorm data
@@ -83,7 +79,6 @@ topics.addEventListener('click', async (event) => {
         if (postText != '' && username != '') {
             let newComment = { username, postText, date, postId };
             let result = await addComment(newComment);
-            // console.log(result);
         }
         // post new comment
         showPost(id);
@@ -101,7 +96,6 @@ function clearFields() {
 }
 
 async function addPost(postData) {
-    // const token = sessionStorage.getItem('userToken');
     const result = await request('http://localhost:3030/jsonstore/collections/myboard/posts', {
         method: 'post',
         headers: {
@@ -109,34 +103,22 @@ async function addPost(postData) {
         },
         body: JSON.stringify(postData)
     });
-    // console.log(result);
     return result;
 }
 
 async function getPosts(postData) {
-    // const token = sessionStorage.getItem('userToken');
-    const result = await request('http://localhost:3030/jsonstore/collections/myboard/posts', {
-        method: 'get',
-    });
-    // console.log(result);
+    const result = await request('http://localhost:3030/jsonstore/collections/myboard/posts');
     return result;
 }
 
 function renderPosts(posts) {
     let container = document.querySelector('.topic-title');
     // clear page contents
-    // container.innerHTML = '';
+
     // render all posts
     Object.keys(posts).forEach(post => {
-        /*
-        postText: "asd"
-        topicName: "asd"
-        username: "asd"
-        date: date
-        subscribes: number
-        _id: "c8e08480-fc5a-472e-b612-484a728d54a5"
-        */
-        let postHTML = `                <div class="topic-container">
+        let postHTML = `                
+        <div class="topic-container">
         <div class="topic-name-wrapper">
             <div class="topic-name">
                 <a href="#" class="normal">

@@ -12,6 +12,7 @@ const links = {
     'loginLink': showLogin,
     'registerLink': showRegister,
     'createLink': showCreate,
+    // 'editButton': showEdit,
 }
 
 setupSection('home-page', setupHome);
@@ -23,10 +24,10 @@ setupSection('form-sign-up', setupRegister);
 
 setupNavigation();
 showHome();
-showEdit();
 
 function setupSection(sectionId, setup) {
     const section = document.getElementById(sectionId);
+    // console.log(section);
     setup(main, section);
 }
 

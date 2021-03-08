@@ -1,5 +1,4 @@
-import { e } from './common.js';
-import { request } from './common.js';
+import { request, e } from './dom.js';
 
 let main;
 let section;
@@ -13,7 +12,7 @@ export async function showPost(id) {
     main.innerHTML = '';
     let post = await getPost(id);
     let postElement = e('div', { className: 'topic-title' }, '');
-    let postHTML = `<!-- topic-title  -->
+    let postHTML = `
     <div class="topic-title">
         <div class="topic-name-wrapper">
             <div class="topic-name">
@@ -22,8 +21,6 @@ export async function showPost(id) {
             </div>
             <div class="subscribers">
                 <p>Subscribers: <span>${post.subscribes}</span></p>
-                <!-- <button class="subscribe">Subscribe</button>
-                <button class="unsubscribe">Unsubscribe</button> -->
             </div>
         </div>
     </div>`;
@@ -60,11 +57,9 @@ export async function showPost(id) {
 // get post from database
 
 async function getPost(id) {
-    // const token = sessionStorage.getItem('userToken');
     const result = await request('http://localhost:3030/jsonstore/collections/myboard/posts/' + id, {
         method: 'get',
     });
-    // console.log(result);
     return result;
 }
 
@@ -88,16 +83,11 @@ function commentForm(postId) {
 }
 
 async function getComments(postId) {
-    // const token = sessionStorage.getItem('userToken');
-    const result = await request('http://localhost:3030/jsonstore/collections/myboard/comments', {
-        method: 'get',
-    });
-    // console.log(result);
+    const result = await request('http://localhost:3030/jsonstore/collections/myboard/comments');
     return result;
 }
 
 export async function addComment(postData) {
-    // const token = sessionStorage.getItem('userToken');
     const result = await request('http://localhost:3030/jsonstore/collections/myboard/comments', {
         method: 'post',
         headers: {
@@ -105,6 +95,5 @@ export async function addComment(postData) {
         },
         body: JSON.stringify(postData)
     });
-    // console.log(result);
     return result;
 }
