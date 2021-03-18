@@ -1,7 +1,7 @@
 import { html } from '../../node_modules/lit-html/lit-html.js';
 import { createRecord } from '../api/data.js';
 
-const createTemplate = (onSubmit) => html`
+const createTemplate = (onSubmit, make, model, year, description, price, img, material) => html`
 <div class="row space-top">
     <div class="col-md-12">
         <h1>Create New Furniture</h1>
@@ -13,29 +13,31 @@ const createTemplate = (onSubmit) => html`
         <div class="col-md-4">
             <div class="form-group">
                 <label class="form-control-label" for="new-make">Make</label>
-                <input class="form-control valid" id="new-make" type="text" name="make">
+                <input class=${'form-control' + (make ? ' is-invalid' : '' )} id="new-make" type="text" name="make">
             </div>
             <div class="form-group has-success">
                 <label class="form-control-label" for="new-model">Model</label>
-                <input class="form-control is-valid" id="new-model" type="text" name="model">
+                <input class=${'form-control' + (model ? ' is-invalid' : '' )} id="new-model" type="text" name="model">
             </div>
             <div class="form-group has-danger">
                 <label class="form-control-label" for="new-year">Year</label>
-                <input class="form-control is-invalid" id="new-year" type="number" name="year">
+                <input class=${'form-control' + (year ? ' is-invalid' : '' )} id="new-year" type="number" name="year">
             </div>
             <div class="form-group">
                 <label class="form-control-label" for="new-description">Description</label>
-                <input class="form-control" id="new-description" type="text" name="description">
+                <input class=${'form-control' + (description ? ' is-invalid' : '' )} id="new-description" type="text"
+                    name="description">
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
                 <label class="form-control-label" for="new-price">Price</label>
-                <input class="form-control" id="new-price" type="number" name="price">
+                <input class=${'form-control' + (price ? ' is-invalid' : '' )} id="new-price" type="number"
+                    name="price">
             </div>
             <div class="form-group">
                 <label class="form-control-label" for="new-image">Image</label>
-                <input class="form-control" id="new-image" type="text" name="img">
+                <input class=${'form-control' + (img ? ' is-invalid' : '' )} id="new-image" type="text" name="img">
             </div>
             <div class="form-group">
                 <label class="form-control-label" for="new-material">Material (optional)</label>
@@ -52,10 +54,19 @@ export async function createPage(ctx) {
     async function onSubmit(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
+        const make = formData.get('make') == '';
+        const model = formData.get('model') == '';
+        const year = formData.get('year') == '';
+        const description = formData.get('description') == '';
+        const price = formData.get('price') == '';
+        const img = formData.get('img') == '';
+        const material = formData.get('material') == '';
+
         const data = [...formData.entries()].reduce((acc, [k, v]) => Object.assign(acc, { [k]: v }), {});
 
         if (Object.entries(data).filter(([k, v]) => k != 'material').some(([k, v]) => v == '')) {
-            return alert('All fiels are required!')
+            ctx.render(createTemplate(onSubmit, make, model, year, description, price, img, material));
+            return alert('All fiels are required!');
         }
 
         data.year = Number(data.year);
@@ -65,3 +76,5 @@ export async function createPage(ctx) {
         ctx.page.redirect('/');
     }
 }
+
+        // .some(([k, v]) => v == '')
